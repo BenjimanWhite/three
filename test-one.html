@@ -1,0 +1,75 @@
+<html>
+  <head>
+    <title> Web Gui for 3D Printing </title>
+  </head>
+
+  <body>
+    <script src="js/three.min.js"></script>
+    <script src="js/OrbitControls.js"></script>
+    <script>
+      var scene, camera, renderer;
+
+      init();
+      animate();
+
+      function init() {
+      	// Create new scene
+        scene = new THREE.Scene();
+        var WIDTH = window.innerWidth,
+            HEIGHT = window.innerHeight;
+
+        // Create and add renderer
+        renderer = new THREE.WebGLRenderer({antialias:true});
+        renderer.setSize(WIDTH, HEIGHT);
+        document.body.appendChild(renderer.domElement);
+
+        // Create and add camera
+        camera = new THREE.PerspectiveCamera(45, WIDTH / HEIGHT, 0.1, 20000);
+        camera.position.set(0,100,0);
+        scene.add(camera);
+
+        // Make things nice when user resizes browser window
+        window.addEventListener('resize', function() {
+          var WIDTH = window.innerWidth,
+              HEIGHT = window.innerHeight;
+          renderer.setSize(WIDTH, HEIGHT);
+          camera.aspect = WIDTH / HEIGHT;
+          camera.updateProjectionMatrix();
+    		});
+
+        // Create line material
+        material = new THREE.LineBasicMaterial({
+          color: 0xffffff
+        });
+
+        // Draw the grid!
+        for(var i = 0; i < 61; i += 2) {
+        	horizontal_geometry = new THREE.Geometry();
+        	vertical_geometry = new THREE.Geometry();
+        	horizontal_geometry.vertices.push(
+        		new THREE.Vector3( -30, 30 - i, 0 ),
+        		new THREE.Vector3( 30, 30 - i, 0 )
+        	);
+        	vertical_geometry.vertices.push(
+        		new THREE.Vector3( -30 + i, 30, 0 ),
+        		new THREE.Vector3( -30 + i, -30, 0 )
+        	);
+        	horizontal_line = new THREE.Line(horizontal_geometry, material);
+        	vertical_line = new THREE.Line(vertical_geometry, material);
+        	scene.add(horizontal_line);
+        	scene.add(vertical_line);
+				}
+
+				// Add mouse controls
+				controls = new THREE.OrbitControls(camera, renderer.domElement);
+			}
+
+			function animate() {
+				requestAnimationFrame(animate);
+				renderer.render(scene, camera);
+				controls.update();
+      }
+
+    </script>
+  </body>
+</html>
