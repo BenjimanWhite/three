@@ -43,9 +43,11 @@
         });
 
         // Draw the grid!
-        for(var i = 0; i < 61; i += 2) {
-        	horizontal_geometry = new THREE.Geometry();
-        	vertical_geometry = new THREE.Geometry();
+        for(var i = 0; i < 61; i += 5) {
+        	var horizontal_geometry = new THREE.Geometry();
+        	var vertical_geometry = new THREE.Geometry();
+        	var third_geometry = new THREE.Geometry();
+        	var fourth_geometry = new THREE.Geometry();
         	horizontal_geometry.vertices.push(
         		new THREE.Vector3( -30, 30 - i, 0 ),
         		new THREE.Vector3( 30, 30 - i, 0 )
@@ -54,11 +56,33 @@
         		new THREE.Vector3( -30 + i, 30, 0 ),
         		new THREE.Vector3( -30 + i, -30, 0 )
         	);
+
+        	third_geometry.vertices.push(
+        		new THREE.Vector3(0,30 , -30 + i ),
+        		new THREE.Vector3(0,-30 , -30 + i)
+        	);
+
+        	fourth_geometry.vertices.push(
+        		new THREE.Vector3(0,30 - i , 30 ),
+        		new THREE.Vector3(0,30 - i , -30)
+        	);
+
         	horizontal_line = new THREE.Line(horizontal_geometry, material);
         	vertical_line = new THREE.Line(vertical_geometry, material);
+        	third_line = new THREE.Line(third_geometry, material);
+        	fourth_line = new THREE.Line(fourth_geometry, material);
+
+
         	scene.add(horizontal_line);
         	scene.add(vertical_line);
+        	scene.add(third_line);
+        	scene.add(fourth_line);
 				}
+
+				var geometry = new THREE.SphereGeometry( 5, 32, 32 );
+				var material = new THREE.MeshBasicMaterial( {color: 0xffffff} );
+				var sphere = new THREE.Mesh( geometry, material );
+				scene.add( sphere )
 
 				// Add mouse controls
 				controls = new THREE.OrbitControls(camera, renderer.domElement);
